@@ -3,11 +3,11 @@
  * The MiniMax algorithm in its most basic form.
  * @author DavidHurst
  */
-public class MiniMax {
+public class MiniMaxNet {
 
     private static final int MAX_DEPTH = 6;
 
-    private MiniMax() {
+    private MiniMaxNet() {
     }
 
     /**

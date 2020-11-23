@@ -146,7 +146,7 @@ public class TicTacToe extends Application {
      * player. Updates the tile it places a mark on also.
      */
     private static void playAI() {
-        int[] move = MiniMax.getBestMove(board);
+        int[] move = MiniMaxNet.getBestMove(board);
         int row = move[0];
         int col = move[1];
         board.placeMark(row, col);
