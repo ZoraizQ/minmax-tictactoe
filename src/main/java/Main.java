@@ -33,6 +33,7 @@ public class Main extends Application {
     private Menu gameMenu;
     private MenuItem newGameOption;
     private BorderPane root;
+    private Text gameMsg = new Text("Starting a new game...");
     
     
 	public static void main(String[] args) {
@@ -68,6 +69,8 @@ public class Main extends Application {
         });
         
         root.setTop(menuBar);
+        
+        root.setBottom(gameMsg);
 
         Scene scene = new Scene(root);
         primaryStage.setTitle("AI TicTacToe");
@@ -90,28 +93,15 @@ public class Main extends Application {
          ex.submit(new MainLoopThread());
     }
     
-    private void finishGame (String winner) {
-    	System.out.println("test");
+    private void finishGame(String winner) {
     	
-        Alert gameFinishMsg = new Alert(AlertType.INFORMATION, "", new ButtonType("Start New Game"));
+        gameMsg.setText("Game Over.");
 
-        gameFinishMsg.setTitle("Game Over");
-        gameFinishMsg.setHeaderText(null);
-        
         if (winner == "") 
-        	gameFinishMsg.setContentText("Draw!");
+        	gameMsg.setText("Draw!");
         else 
-        	gameFinishMsg.setContentText("Computer " + winner + " won!");
-        
-        gameFinishMsg.setOnHidden(e -> {
-        	gameFinishMsg.close();
-            restartGame();
-        });
-        
-        System.out.println("test2");
-    	
-        
-        gameFinishMsg.show();
+        	gameMsg.setText("Computer " + winner + " won!");
+
     }
 
     class MainLoopThread implements Callable<Integer>{
@@ -124,6 +114,7 @@ public class Main extends Application {
 			String turn = "X";
 			
 			for(int iter = 0; iter < 9; iter++) { // total 9 turns
+				
 				AI_MinMax newAIPrediction = new AI_MinMax(gameBoard);
 				ArrayList<Integer> bestMovesList = newAIPrediction.printBestMoves(false);
 	
@@ -131,6 +122,7 @@ public class Main extends Application {
 			
 				try {
 					Integer index = future.get(); // result of promise, index to set character  on
+					gameMsg.setText(turn + "'s turn! Selects slot " + index + ".");
 					gameBoard[index] = turn; // sets x or o depending on term
 					textBoard.get(index).setText(turn);
 					
@@ -142,6 +134,10 @@ public class Main extends Application {
 				} 
 				catch(Exception e){System.out.println(e.getMessage());}
 				
+				if (iter == 8) {
+					finishGame(turn);					
+				}
+				
 				if(turn == "X") {
 					turn = "O";
 				}
@@ -149,14 +145,11 @@ public class Main extends Application {
 					turn = "X";
 				}
 				
-				if (iter == 8) {
-					finishGame(turn);
-				}
-			}
 
-			ex.shutdown();
+			}
 			
 			
+			ex.shutdown();	
 			
 			return 0;
 		}
