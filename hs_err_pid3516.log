@@ -1,0 +1,165 @@
+#
+# There is insufficient memory for the Java Runtime Environment to continue.
+# Native memory allocation (malloc) failed to allocate 1048576 bytes for AllocateHeap
+# Possible reasons:
+#   The system is out of physical RAM or swap space
+#   The process is running with CompressedOops enabled, and the Java Heap may be blocking the growth of the native heap
+# Possible solutions:
+#   Reduce memory load on the system
+#   Increase physical memory or swap space
+#   Check if swap backing store is full
+#   Decrease Java heap size (-Xmx/-Xms)
+#   Decrease number of Java threads
+#   Decrease Java thread stack sizes (-Xss)
+#   Set larger code cache with -XX:ReservedCodeCacheSize=
+#   JVM is running with Unscaled Compressed Oops mode in which the Java heap is
+#     placed in the first 4GB address space. The Java Heap base address is the
+#     maximum limit for the native heap growth. Please use -XX:HeapBaseMinAddress
+#     to set the Java Heap base and to place the Java Heap above 4GB virtual address.
+# This output file may be truncated or incomplete.
+#
+#  Out of Memory Error (memory/allocation.inline.hpp:61), pid=3516, tid=0x0000000000003888
+#
+# JRE version:  (8.0_251-b08) (build )
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (25.251-b08 mixed mode windows-amd64 compressed oops)
+# Failed to write core dump. Minidumps are not enabled by default on client versions of Windows
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x0000000002e23000):  JavaThread "Unknown thread" [_thread_in_vm, id=14472, stack(0x0000000002d20000,0x0000000002e20000)]
+
+Stack: [0x0000000002d20000,0x0000000002e20000]
+[error occurred during error reporting (printing stack bounds), id 0xc0000005]
+
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+
+Other Threads:
+
+=>0x0000000002e23000 (exited) JavaThread "Unknown thread" [_thread_in_vm, id=14472, stack(0x0000000002d20000,0x0000000002e20000)]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+heap address: 0x0000000081800000, size: 2024 MB, Compressed Oops mode: 32-bit
+Narrow klass base: 0x0000000000000000, Narrow klass shift: 3
+Compressed class space size: 1073741824 Address: 0x0000000100000000
+
+Heap:
+ PSYoungGen      total 38400K, used 665K [0x00000000d5d80000, 0x00000000d8800000, 0x0000000100000000)
+  eden space 33280K, 2% used [0x00000000d5d80000,0x00000000d5e26670,0x00000000d7e00000)
+  from space 5120K, 0% used [0x00000000d8300000,0x00000000d8300000,0x00000000d8800000)
+  to   space 5120K, 0% used [0x00000000d7e00000,0x00000000d7e00000,0x00000000d8300000)
+ ParOldGen       total 87552K, used 0K [0x0000000081800000, 0x0000000086d80000, 0x00000000d5d80000)
+  object space 87552K, 0% used [0x0000000081800000,0x0000000081800000,0x0000000086d80000)
+ Metaspace       used 752K, capacity 4480K, committed 4480K, reserved 1056768K
+  class space    used 76K, capacity 384K, committed 384K, reserved 1048576K
+
+Card table byte_map: [0x00000000122e0000,0x00000000126e0000] byte_map_base: 0x0000000011ed4000
+
+Marking Bits: (ParMarkBitMap*) 0x00000000676daf90
+ Begin Bits: [0x0000000012d90000, 0x0000000014d30000)
+ End Bits:   [0x0000000014d30000, 0x0000000016cd0000)
+
+Polling page: 0x0000000001020000
+
+CodeCache: size=245760Kb used=328Kb max_used=328Kb free=245431Kb
+ bounds [0x0000000002f20000, 0x0000000003190000, 0x0000000011f20000]
+ total_blobs=58 nmethods=0 adapters=38
+ compilation: enabled
+
+Compilation events (0 events):
+No events
+
+GC Heap History (0 events):
+No events
+
+Deoptimization events (0 events):
+No events
+
+Classes redefined (0 events):
+No events
+
+Internal exceptions (0 events):
+No events
+
+Events (10 events):
+Event: 0.071 loading class java/lang/Short
+Event: 0.071 loading class java/lang/Short done
+Event: 0.071 loading class java/lang/Integer
+Event: 0.072 loading class java/lang/Integer done
+Event: 0.072 loading class java/lang/Long
+Event: 0.072 loading class java/lang/Long done
+Event: 0.074 loading class java/lang/NullPointerException
+Event: 0.074 loading class java/lang/NullPointerException done
+Event: 0.074 loading class java/lang/ArithmeticException
+Event: 0.074 loading class java/lang/ArithmeticException done
+
+
+Dynamic libraries:
+0x00007ff68b990000 - 0x00007ff68b9c7000 	C:\Program Files\Java\jre1.8.0_251\bin\javaw.exe
+0x00007ffde8640000 - 0x00007ffde8830000 	C:\Windows\SYSTEM32\ntdll.dll
+0x00007ffde8350000 - 0x00007ffde8402000 	C:\Windows\System32\KERNEL32.DLL
+0x00007ffde6010000 - 0x00007ffde62b3000 	C:\Windows\System32\KERNELBASE.dll
+0x00007ffde84b0000 - 0x00007ffde8553000 	C:\Windows\System32\ADVAPI32.dll
+0x00007ffde8410000 - 0x00007ffde84ae000 	C:\Windows\System32\msvcrt.dll
+0x00007ffde81a0000 - 0x00007ffde8237000 	C:\Windows\System32\sechost.dll
+0x00007ffde6da0000 - 0x00007ffde6ec0000 	C:\Windows\System32\RPCRT4.dll
+0x00007ffde6750000 - 0x00007ffde68e4000 	C:\Windows\System32\USER32.dll
+0x00007ffde5f60000 - 0x00007ffde5f81000 	C:\Windows\System32\win32u.dll
+0x00007ffde85d0000 - 0x00007ffde85f6000 	C:\Windows\System32\GDI32.dll
+0x00007ffde6550000 - 0x00007ffde66e4000 	C:\Windows\System32\gdi32full.dll
+0x00007ffde5d50000 - 0x00007ffde5dee000 	C:\Windows\System32\msvcp_win.dll
+0x00007ffde5e60000 - 0x00007ffde5f5a000 	C:\Windows\System32\ucrtbase.dll
+0x00007ffdd5cf0000 - 0x00007ffdd5f75000 	C:\Windows\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.18362.657_none_e6c5b579130e3898\COMCTL32.dll
+0x00007ffde6a20000 - 0x00007ffde6d56000 	C:\Windows\System32\combase.dll
+0x00007ffde5f90000 - 0x00007ffde6010000 	C:\Windows\System32\bcryptPrimitives.dll
+0x00007ffde6d70000 - 0x00007ffde6d9e000 	C:\Windows\System32\IMM32.DLL
+0x0000000065a20000 - 0x0000000065af2000 	C:\Program Files\Java\jre1.8.0_251\bin\msvcr100.dll
+0x0000000066eb0000 - 0x000000006775b000 	C:\Program Files\Java\jre1.8.0_251\bin\server\jvm.dll
+0x00007ffde8090000 - 0x00007ffde8098000 	C:\Windows\System32\PSAPI.DLL
+0x00007ffde1000000 - 0x00007ffde1009000 	C:\Windows\SYSTEM32\WSOCK32.dll
+0x00007ffde72b0000 - 0x00007ffde731f000 	C:\Windows\System32\WS2_32.dll
+0x00007ffde21d0000 - 0x00007ffde21f4000 	C:\Windows\SYSTEM32\WINMM.dll
+0x00007ffddddf0000 - 0x00007ffddddfa000 	C:\Windows\SYSTEM32\VERSION.dll
+0x00007ffde21a0000 - 0x00007ffde21cd000 	C:\Windows\SYSTEM32\winmmbase.dll
+0x00007ffde5df0000 - 0x00007ffde5e3a000 	C:\Windows\System32\cfgmgr32.dll
+0x00007ffdc6aa0000 - 0x00007ffdc6aaf000 	C:\Program Files\Java\jre1.8.0_251\bin\verify.dll
+0x00007ffdc6a70000 - 0x00007ffdc6a99000 	C:\Program Files\Java\jre1.8.0_251\bin\java.dll
+0x00007ffdc6a50000 - 0x00007ffdc6a66000 	C:\Program Files\Java\jre1.8.0_251\bin\zip.dll
+
+VM Arguments:
+jvm_args: -Dfile.encoding=UTF-8 
+java_command: Main
+java_class_path (initial): D:\tictactoe\ai-tictactoe\target\classes;C:\Users\ZoraizQ\.p2\pool\plugins\org.junit.jupiter.api_5.6.0.v20200203-2009.jar;C:\Users\ZoraizQ\.p2\pool\plugins\org.junit.jupiter.engine_5.6.0.v20200203-2009.jar;C:\Users\ZoraizQ\.p2\pool\plugins\org.junit.jupiter.migrationsupport_5.6.0.v20200203-2009.jar;C:\Users\ZoraizQ\.p2\pool\plugins\org.junit.jupiter.params_5.6.0.v20200203-2009.jar;C:\Users\ZoraizQ\.p2\pool\plugins\org.junit.platform.commons_1.6.0.v20200203-2009.jar;C:\Users\ZoraizQ\.p2\pool\plugins\org.junit.platform.engine_1.6.0.v20200203-2009.jar;C:\Users\ZoraizQ\.p2\pool\plugins\org.junit.platform.launcher_1.6.0.v20200203-2009.jar;C:\Users\ZoraizQ\.p2\pool\plugins\org.junit.platform.runner_1.6.0.v20200203-2009.jar;C:\Users\ZoraizQ\.p2\pool\plugins\org.junit.platform.suite.api_1.6.0.v20200203-2009.jar;C:\Users\ZoraizQ\.p2\pool\plugins\org.junit.vintage.engine_5.6.0.v20200203-2009.jar;C:\Users\ZoraizQ\.p2\pool\plugins\org.opentest4j_1.2.0.v20190826-0900.jar;C:\Users\ZoraizQ\.p2\pool\plugins\org.apiguardian_1.1.0.v20190826-0900.jar;C:\Users\ZoraizQ\.p2\pool\plugins\org.junit_4.13.0.v20200204-1500.jar;C:\Users\ZoraizQ\.p2\pool\plugins\org.hamcrest.core_1.3.0.v20180420-1519.jar;C:\Users\ZoraizQ\.m2\repository\org\openjfx\javafx-controls\12.0.1\javafx-controls-12.0.1.jar;C:\Users\ZoraizQ\.m2\repository\org\openjfx\javafx-controls\12.0.1\javafx-controls-12.0.1-win.jar;C:\Users\ZoraizQ\.m2\repository\org\openjfx\javafx-graphics\12.0.1\javafx-graphics-12.0.1.jar;C:\Users\ZoraizQ\.m2\repository\org\openjfx\javafx-graphics\12.0.1\javafx-graphics-12.0.1-win.jar;C:\Users\ZoraizQ\.m2\repository\org\openjfx\javafx-base\12.0.1\javafx-base-12.0.1.jar;C:\Users\ZoraizQ\.m2\repository\org\openjfx\javafx-base\12.0.1\javafx-base-12.0.1-win.jar;C:\Users\ZoraizQ\.m2\repository\org\openjfx\javafx-fxml\12\javafx-fxml-12.jar;C:\Users\ZoraizQ\.m2\repository\org\openjfx\javafx-fxml\12\javafx-fxml-12-win.jar
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+JAVA_HOME=C:\Program Files\Java\jdk-14.0.1
+PATH=C:/Program Files/Java/jdk-14.0.1/bin/server;C:/Program Files/Java/jdk-14.0.1/bin;C:\Program Files\Java\jdk-14.0.1\bin;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\ProgramData\Oracle\Java\javapath;C:\Python38\Scripts\;C:\Python38\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\iCLS\;C:\Program Files\Intel\Intel(R) Management Engine Components\iCLS\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\AMD\ATI.ACE\Core-Static;C:\Program Files\dotnet\;C:\Program Files\nodejs\;C:\ProgramData\chocolatey\bin;C:\Program Files\Git\cmd;C:\MinGW\bin;C:\Program Files\CMake\bin;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Users\ZoraizQ\AppData\Local\Programs\Python\Python37\Scripts\;C:\Users\ZoraizQ\AppData\Local\Programs\Python\Python37\;C:\Users\ZoraizQ\AppData\Local\Microsoft\WindowsApps;C:\Users\ZoraizQ\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\ZoraizQ\AppData\Local\GitHubDesktop\bin;C:\Users\ZoraizQ\.dotnet\tools;C:\Users\ZoraizQ\AppData\Roaming\npm;C:\Users\ZoraizQ\AppData\Local\hyper\app-3.0.2\resources\bin;C:\Windows\system32;
+USERNAME=ZoraizQ
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 78 Stepping 3, GenuineIntel
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows 10.0 , 64 bit Build 18362 (10.0.18362.329)
+
+CPU:total 4 (initial active 4) (2 cores per cpu, 2 threads per core) family 6 model 78 stepping 3, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, avx, avx2, aes, clmul, erms, 3dnowpref, lzcnt, ht, tsc, tscinvbit, bmi1, bmi2, adx
+
+Memory: 4k page, physical 8285096k(1476060k free), swap 15027108k(5812k free)
+
+vm_info: Java HotSpot(TM) 64-Bit Server VM (25.251-b08) for windows-amd64 JRE (1.8.0_251-b08), built on Mar 12 2020 06:31:49 by "" with MS VC++ 10.0 (VS2010)
+
+time: Tue Nov 24 05:24:16 2020
+timezone: Pakistan Standard Time
+elapsed time: 0 seconds (0d 0h 0m 0s)
+

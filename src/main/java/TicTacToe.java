@@ -34,7 +34,7 @@ public class TicTacToe extends Application {
      */
     public final static class Tile extends Button {
 
-        private final int row;
+        private final int ;
         private final int col;
         private char mark;
 
