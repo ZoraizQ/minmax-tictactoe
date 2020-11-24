@@ -97,13 +97,65 @@ public class Main extends Application {
     	
         gameMsg.setText("Game Over.");
 
-        if (winner == "") 
+        if (winner == "D") 
         	gameMsg.setText("Draw!");
         else 
         	gameMsg.setText("Computer " + winner + " won!");
 
     }
+    
+    private String evaluateBoard(String turn) {
 
+    	String[][] board = new String[3][3];
+    	for (int i = 0; i < 3; i++) {
+    		for (int j = 0; j < 3; j++) {
+        		board[i][j] = gameBoard[i*3+j]; //fix
+        	}
+    	}
+
+    	//ROW
+        for( int i = 0; i < 3; i++ ) {
+            if(board[i][0] == turn && board[i][1] == turn && board[i][2] == turn){
+                return turn;
+            }
+            
+        }
+        
+        //COLUMN
+        for( int j = 0; j < 3; j++ ) {
+            if( board[0][j] == turn && board[1][j] == turn && board[2][j] == turn) {
+                return turn;
+            }
+            
+        }
+        
+        //DIAGONAL
+        if( board[0][0] == turn  && board[1][1] == turn  && board[2][2] == turn  ) {
+        	return turn;        	
+        }
+        
+      
+        if( board[0][2] == turn  && board[1][1] == turn  && board[2][0] == turn ) {
+        	return turn;        	
+        }
+            
+        
+        int gc = 0;
+
+        //DRAW
+        for( int i = 0; i < 3; i++ ){
+            for( int j = 0; j < 3; j++ ) {
+                if( board[i][j] != "b" )
+                    gc++;
+
+                if( gc == 9 )
+                    return "D";
+            }
+        }
+        
+        return "";
+    }
+    
     class MainLoopThread implements Callable<Integer>{
 		
 		@Override
@@ -130,15 +182,16 @@ public class Main extends Application {
 					System.out.println(gameBoard[0]+ " "+gameBoard[1]+" "+gameBoard[2]);
 					System.out.println(gameBoard[3]+ " "+gameBoard[4]+" "+gameBoard[5]);
 					System.out.println(gameBoard[6]+ " "+gameBoard[7]+" "+gameBoard[8]);
+					
+					String result = evaluateBoard(turn);
+					if (result != "") {
+						finishGame(result);
+						break;
+					}
 				
 				} 
 				catch(Exception e){System.out.println(e.getMessage());}
-				
-				if (iter == 8) {
-					finishGame(turn);					
-				}
-				
-				if(turn == "X") {
+								if(turn == "X") {
 					turn = "O";
 				}
 				else {
