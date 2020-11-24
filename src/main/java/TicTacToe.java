@@ -1,190 +1,205 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Scanner;
+import java.util.Random;
+import java.util.concurrent.*;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.TextAlignment;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-/**
- * @author DavidHurst
- */
-public class TicTacToe extends Application {
 
-    private static GridPane gameBoard;
-    private static Board board;
-    private AnimationTimer gameTimer;
-    private MenuBar menuBar;
+public class TicTacToe extends Application {
+	private static String[] gameBoard = {"b", "b", "b", "b", "b", "b", "b", "b", "b"};
+	private static ArrayList<Text> textBoard = new ArrayList<Text>();
+	private static GridPane gridBoard;
+	private MenuBar menuBar;
     private Menu gameMenu;
     private MenuItem newGameOption;
     private BorderPane root;
-
-    /**
-     * Objects of this class visually represent the tiles in the game and handle
-     * user input.
-     */
-    public final static class Tile extends Button {
-
-        private final int ;
-        private final int col;
-        private char mark;
-
-        public Tile(int initRow, int initCol, char initMark) {
-            row = initRow;
-            col = initCol;
-            mark = initMark;
-            initialiseTile();
-        }
-
-        private void initialiseTile() {
-            this.setOnMouseClicked(e -> {
-                if (!board.isCrossTurn()) {
-                    board.placeMark(this.row, this.col);
-                    this.update();
-                }
-            });
-            this.setStyle("-fx-font-size:70");
-            this.setTextAlignment(TextAlignment.CENTER);
-            this.setMinSize(150.0, 150.0);
-            this.setText("" + this.mark);
-        }
-
-        /**
-         * Retrieves state of tile from board which has the corresponding row 
-         * and column coordinate and updates this object's text field with it.
-         */
-        public void update() {
-            this.mark = board.getMarkAt(this.row, this.col);
-            this.setText("" + mark);
-        }
-    }
-
-    public static void main(String[] args) {
+    private Text gameMsg = new Text("Starting a new game...");
+    private BoardHelper boardHelper = new BoardHelper();
+    
+	public static void main(String[] args) {
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) {
-        root = new BorderPane();
+    	root = new BorderPane();
+    	
+    	gridBoard = new GridPane();
+    	gridBoard.setAlignment(Pos.CENTER);
 
-        root.setCenter(generateGUI());
-        root.setTop(initialiseMenu());
-
-        Scene scene = new Scene(root);
-        primaryStage.setTitle("Tic Tac Toe");
-        primaryStage.setScene(scene);
-
-        runGameLoop();
-
-        primaryStage.show();
-    }
-
-    /**
-     * Fills and returns a GridPane with tiles, this GridPane is representative
-     * of the game board.
-     * @return the GridPane
-     */
-    private static GridPane generateGUI() {
-        gameBoard = new GridPane();
-        board = new Board();
-        gameBoard.setAlignment(Pos.CENTER);
-        
-        for (int row = 0; row < board.getWidth(); row++) {
-            for (int col = 0; col < board.getWidth(); col++) {
-                Tile tile = new Tile(row, col, board.getMarkAt(row, col));
-                GridPane.setConstraints(tile, col, row);
-                gameBoard.getChildren().add(tile);
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 3; col++) {
+                Text gridText = new Text(gameBoard[row*3+col]);
+                gridText.setId("gridText");
+                gridText.setTextAlignment(TextAlignment.CENTER);
+                textBoard.add(gridText);
+                gridBoard.add(gridText, col, row);
             }
         }
-        return gameBoard;
-    }
-
-    private MenuBar initialiseMenu() {
+        
+        VBox center_vbox = new VBox();
+        center_vbox.setSpacing(5.0);
+        
+        center_vbox.getChildren().add(gridBoard);
+        root.setCenter(center_vbox);
+        
+        
         menuBar = new MenuBar();
-        gameMenu = new Menu("Game");
-        newGameOption = new MenuItem("New Game");
+        gameMenu = new Menu("Options");
+        newGameOption = new MenuItem("Restart Game");
 
         gameMenu.getItems().add(newGameOption);
         menuBar.getMenus().add(gameMenu);
         newGameOption.setOnAction(e -> {
-            resetGame();
+        	restartGame();
         });
-        return menuBar;
-    }
+        
+        root.setTop(menuBar);
+        
+        
+        gameMsg.setId("gameMsg");
+        gameMsg.setTextAlignment(TextAlignment.CENTER);
+        center_vbox.getChildren().add(gameMsg);
+        
+        center_vbox.setAlignment(Pos.CENTER);
 
-    /**
-     * Runs the main game loop which is responsible for playing the AI's turn 
-     * as long as the game is still ongoing.
-     */
-    private void runGameLoop() {
-        gameTimer = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                if (board.isGameOver()) {
-                    endGame();
-                } else {
-                    if (board.isCrossTurn()) {
-                        playAI();
-                    }
-                }
-            }
-        };
-        gameTimer.start();
-    }
 
-    /**
-     * Analyses the current state of the board and plays the move best for the X
-     * player. Updates the tile it places a mark on also.
-     */
-    private static void playAI() {
-        int[] move = MiniMaxNet.getBestMove(board);
-        int row = move[0];
-        int col = move[1];
-        board.placeMark(row, col);
-        for (Node child : gameBoard.getChildren()) {
-            if (GridPane.getRowIndex(child) == row
-                    && GridPane.getColumnIndex(child) == col) {
-                Tile t = (Tile) child;
-                t.update();
-                return;
-            }
-        }
-    }
+        Scene scene = new Scene(root, 400, 250);
+        scene.getStylesheets().add("styles.css");
+        primaryStage.setTitle("AI TicTacToe");
+        primaryStage.setScene(scene);
+        
+        
+        ExecutorService ex = Executors.newFixedThreadPool(5);
+        ex.submit(new MainLoopThread());
 
-    private void resetGame() {
-        root.setCenter(generateGUI());
-        runGameLoop();
-    }
+        primaryStage.show();
 
-    /**
-     * Stops the game loop and displays the result of the game.
-     */
-    private void endGame() {
-        gameTimer.stop();
-        Alert gameOverAlert = new Alert(AlertType.INFORMATION, "", 
-                        new ButtonType("New Game"));
-        char winner = board.getWinningMark();
-
-        gameOverAlert.setTitle("Game Over");
-        gameOverAlert.setHeaderText(null);
-        if (winner == ' ') {
-            gameOverAlert.setContentText("Draw!");
-        } else {
-            gameOverAlert.setContentText(winner + " wins!");
-        }
-        gameOverAlert.setOnHidden(e -> {
-            gameOverAlert.close();
-            resetGame();
-        });
-        gameOverAlert.show();
+        ex.shutdown();
+    
     }
+    
+    private void restartGame() {
+    	 for(int iter = 0; iter < 9; iter++) {
+    		 gameBoard[iter] = "b";
+    		 textBoard.get(iter).setText("b");
+    	 }
+    	 ExecutorService ex = Executors.newFixedThreadPool(5);
+         ex.submit(new MainLoopThread());
+    }
+    
+    private void finishGame(String winner) {
+    	
+        gameMsg.setText("Game Over.");
+
+        if (winner == "D") 
+        	gameMsg.setText("Draw!");
+        else 
+        	gameMsg.setText("Computer " + winner + " won!");
+
+    }
+    
+    
+    
+    class MainLoopThread implements Callable<Integer>{
+		
+		@Override
+		public Integer call() throws Exception {
+	
+	    	ExecutorService ex = Executors.newFixedThreadPool(5);
+			
+			String turn = "X";
+			
+			for(int iter = 0; iter < 9; iter++) { // total 9 turns
+				
+				AI_MinMax newAIPrediction = new AI_MinMax(gameBoard);
+				ArrayList<Integer> bestMovesList = newAIPrediction.printBestMoves(false);
+	
+				Future<Integer> future = ex.submit(new MakeTurnThread(gameBoard, turn, bestMovesList));
+			
+				try {
+					Integer index = future.get(); // result of promise, index to set character  on
+					gameMsg.setText(turn + "'s turn! Selects slot " + index + ".");
+					gameBoard[index] = turn; // sets x or o depending on term
+					textBoard.get(index).setText(turn);
+					
+					// print updated gameboard
+					System.out.println(gameBoard[0]+ " "+gameBoard[1]+" "+gameBoard[2]);
+					System.out.println(gameBoard[3]+ " "+gameBoard[4]+" "+gameBoard[5]);
+					System.out.println(gameBoard[6]+ " "+gameBoard[7]+" "+gameBoard[8]);
+					
+					String result = boardHelper.evaluateBoard(gameBoard, turn);
+					if (result != "") {
+						finishGame(result);
+						break;
+					}
+				
+				} 
+				catch(Exception e){System.out.println(e.getMessage());}
+				if(turn == "X") {
+					turn = "O";
+				}
+				else {
+					turn = "X";
+				}
+				
+
+			}
+			
+			
+			ex.shutdown();	
+			
+			return 0;
+		}
+	
+    }
+}
+
+
+
+
+
+class MakeTurnThread implements Callable<Integer>{
+
+	String[] board;
+	ArrayList<Integer> movesList = new ArrayList<Integer>();
+	String move;
+	
+	MakeTurnThread(String[] game, String move, ArrayList<Integer> moveslist){
+		this.board = game; // board
+		this.move = move; // x or o
+		this.movesList = moveslist;
+	}
+	
+	@Override
+	public Integer call() throws Exception {
+		Random r = new Random(); 
+		Integer move =  movesList.get(r.nextInt(movesList.size()));
+		
+		Thread.sleep(1000);
+		System.out.println("\n" + "player: " + move + " chooses index: "+move);
+		return move-1; //index of move
+	}
+	
 }
